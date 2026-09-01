@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getSessionAccount } from "@/lib/auth";
-import { leadsFor, quotesFor } from "@/lib/db";
+import { listLeads, listQuotes } from "@/lib/store";
 import { greeting, money, timeAgo } from "@/lib/format";
 import { funnel } from "@/lib/metrics";
 import { redirect } from "next/navigation";
@@ -8,8 +8,8 @@ import { redirect } from "next/navigation";
 export default async function DashboardPage() {
   const account = await getSessionAccount();
   if (!account?.business) redirect("/login");
-  const leads = leadsFor(account.business.id);
-  const quotes = quotesFor(account.business.id);
+  const leads = await listLeads(account.business.id);
+  const quotes = await listQuotes(account.business.id);
   const stats = funnel(leads);
   const needs = leads.filter((l) => ["new", "contacted", "quoted", "following_up"].includes(l.status));
 

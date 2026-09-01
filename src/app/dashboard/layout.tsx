@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { signOut } from "@/app/auth/actions";
 import { getSessionAccount } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -63,18 +64,10 @@ export default async function DashboardLayout({
 
 function LogoutButton() {
   return (
-    <button
-      formAction={async () => {
-        "use server";
-        const { cookies } = await import("next/headers");
-        const { SESSION_COOKIE } = await import("@/lib/auth");
-        (await cookies()).delete(SESSION_COOKIE);
-        const { redirect } = await import("next/navigation");
-        redirect("/login");
-      }}
-      className="text-xs text-white/40 hover:text-white"
-    >
-      Log out
-    </button>
+    <form action={signOut}>
+      <button type="submit" className="text-xs text-white/40 hover:text-white">
+        Log out
+      </button>
+    </form>
   );
 }

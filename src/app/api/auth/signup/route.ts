@@ -2,6 +2,8 @@ import { cookies } from "next/headers";
 import { SESSION_COOKIE } from "@/lib/auth";
 import { hashPassword, signSession } from "@/lib/auth-crypto";
 import { getUserByEmail, readStore, uid, writeStore } from "@/lib/db";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { sendMagicLink } from "@/lib/supabase/magic-link";
 
 export async function POST(req: Request) {
   const { email, password, name, firstName } = (await req.json()) as {
@@ -10,7 +12,23 @@ export async function POST(req: Request) {
     name?: string;
     firstName?: string;
   };
-  if (!email || !password || !name || !firstName) {
+  if (!email || !name || !firstName) {
+    return Response.json({ error: "Name, business name and email are required" }, { status: 400 });
+  }
+
+  if (isSupabaseConfigured()) {
+    const error = await sendMagicLink(req, email, {
+      firstName,
+      businessName: name,
+      createUser: true,
+    });
+    if (error) {
+      return Response.json({ error: error.message || "Could not send a sign-in link" }, { status: 400 });
+    }
+    return Response.json({ ok: true, checkEmail: true });
+  }
+
+  if (!password) {
     return Response.json({ error: "All fields required" }, { status: 400 });
   }
   if (getUserByEmail(email)) {

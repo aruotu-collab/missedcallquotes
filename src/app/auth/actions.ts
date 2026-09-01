@@ -1,14 +1,16 @@
+"use server";
+
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { SESSION_COOKIE } from "@/lib/auth";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 
-export async function POST() {
+export async function signOut() {
   if (isSupabaseConfigured()) {
     const supabase = await createClient();
     await supabase.auth.signOut();
   }
-  const jar = await cookies();
-  jar.delete(SESSION_COOKIE);
-  return Response.json({ ok: true });
+  (await cookies()).delete(SESSION_COOKIE);
+  redirect("/login");
 }

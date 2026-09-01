@@ -13,10 +13,19 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-Demo plumber login:
+Members sign in with a **magic link** once Supabase is configured. Without those env vars, local demo login still works:
 
 - Email: `dave@davesplumbing.test`
 - Password: `plumber123`
+
+### Magic link + database (Supabase)
+
+1. In the `missedcallquotes` project, copy **Project URL** and **anon public** key into `.env.local` and Vercel as `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+2. Run `supabase/schema.sql` in the SQL editor (creates `businesses`, `leads`, `quotes` with RLS).
+3. Authentication → URL configuration:
+   - Site URL: `https://missedcallquotes.com`
+   - Redirect URLs: `https://missedcallquotes.com/auth/callback`, `http://localhost:3000/auth/callback`, `http://localhost:3001/auth/callback`
+4. Authentication → Providers → Email: enable magic links.
 
 ## What ships in V1
 
@@ -27,7 +36,7 @@ Demo plumber login:
 - Simulated missed-call catcher (creates real leads) until Twilio is connected
 - Twilio webhook stubs at `/api/twilio/voice` and `/api/twilio/sms`
 
-Data lives in `.data/store.json` so you can run without Postgres. Swap that file store for Supabase/Postgres before you have more than a handful of paying plumbers.
+With Supabase configured, members, jobs and quotes live in Postgres. Without it, data still lives in `.data/store.json` (ephemeral on Vercel).
 
 ## Pricing the company around
 

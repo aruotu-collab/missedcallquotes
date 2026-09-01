@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionAccount } from "@/lib/auth";
-import { leadsFor } from "@/lib/db";
+import { listLeads } from "@/lib/store";
 import { money, timeAgo } from "@/lib/format";
 
 export default async function LeadsPage() {
   const account = await getSessionAccount();
   if (!account?.business) redirect("/login");
-  const leads = leadsFor(account.business.id);
+  const leads = await listLeads(account.business.id);
 
   return (
     <div>

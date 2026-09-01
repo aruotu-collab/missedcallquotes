@@ -31,7 +31,7 @@ export type PricingMode = "fixed" | "range" | "approval";
 export type User = {
   id: string;
   email: string;
-  passwordHash: string;
+  passwordHash?: string;
   createdAt: string;
 };
 

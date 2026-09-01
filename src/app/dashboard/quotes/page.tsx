@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionAccount } from "@/lib/auth";
-import { leadsFor, quotesFor } from "@/lib/db";
+import { listLeads, listQuotes } from "@/lib/store";
 import { money, timeAgo } from "@/lib/format";
 
 export default async function QuotesPage() {
   const account = await getSessionAccount();
   if (!account?.business) redirect("/login");
-  const quotes = quotesFor(account.business.id);
-  const leads = leadsFor(account.business.id);
+  const quotes = await listQuotes(account.business.id);
+  const leads = await listLeads(account.business.id);
 
   return (
     <div>

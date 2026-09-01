@@ -1,7 +1,7 @@
 import { getSessionAccount } from "@/lib/auth";
 import { reply, startConversation } from "@/lib/engine";
-import { readStore, uid, writeStore } from "@/lib/db";
-import type { ConversationState, Lead } from "@/lib/types";
+import { insertLead } from "@/lib/store";
+import type { ConversationState } from "@/lib/types";
 
 export async function POST(req: Request) {
   const body = (await req.json()) as {
@@ -19,9 +19,7 @@ export async function POST(req: Request) {
   if (next.complete && next.lead && body.persist) {
     const account = await getSessionAccount();
     if (account?.business) {
-      const store = readStore();
-      const lead: Lead = {
-        id: uid("lead"),
+      await insertLead({
         businessId: account.business.id,
         customerName: body.customerName || next.lead.customerName,
         customerPhone: body.customerPhone || next.lead.customerPhone,
@@ -44,9 +42,7 @@ export async function POST(req: Request) {
         conversation: next.messages,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      };
-      store.leads.push(lead);
-      writeStore(store);
+      });
     }
   }
 

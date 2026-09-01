@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { getSessionAccount } from "@/lib/auth";
-import { leadsFor } from "@/lib/db";
+import { listLeads } from "@/lib/store";
 import { LeadActions } from "@/components/lead-actions";
 import { money, timeAgo } from "@/lib/format";
 
@@ -8,7 +8,7 @@ export default async function LeadPage({ params }: { params: Promise<{ id: strin
   const account = await getSessionAccount();
   if (!account?.business) redirect("/login");
   const { id } = await params;
-  const lead = leadsFor(account.business.id).find((l) => l.id === id);
+  const lead = (await listLeads(account.business.id)).find((l) => l.id === id);
   if (!lead) notFound();
 
   return (

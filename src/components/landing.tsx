@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { DemoChat } from "./demo-chat";
-import { RevenueCalculator } from "./calculator";
-import { ArrowIcon, CheckIcon } from "./icons";
+import { HeroPitch } from "./hero-pitch";
+import { CheckIcon } from "./icons";
 
 export function Landing() {
   return (
     <main>
-      <Hero />
+      <HeroPitch />
       <DemoStrip />
       <HowItWorks />
       <Output />
@@ -15,47 +15,6 @@ export function Landing() {
       <PricingTeaser />
       <Founding />
     </main>
-  );
-}
-
-function Hero() {
-  return (
-    <section className="relative overflow-hidden bg-navy text-white">
-      <div className="absolute inset-0 opacity-40 [background:radial-gradient(circle_at_80%_0%,#b8893a33,transparent_35%),radial-gradient(circle_at_0%_80%,#1f6b4a33,transparent_40%)]" />
-      <div className="relative mx-auto flex max-w-6xl flex-col-reverse gap-10 px-5 py-12 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:py-24">
-        <div>
-          <p className="text-xs uppercase tracking-[0.22em] text-brass">
-            Built for UK plumbers & heating engineers
-          </p>
-          <h1 className="mt-5 font-serif text-5xl leading-[1.05] md:text-6xl">
-            Turn missed calls into quote-ready jobs.
-          </h1>
-          <p className="mt-6 max-w-xl text-lg leading-8 text-white/70">
-            When you can&apos;t answer, MissedCallQuotes texts the caller, finds out exactly
-            what they need, gets their postcode and photos, and gives you a qualified job to
-            quote. Keep your existing phone number.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="/demo"
-              className="inline-flex items-center gap-2 rounded-full bg-brass px-5 py-3 text-sm font-semibold text-navy"
-            >
-              Try the live demo <ArrowIcon className="h-4 w-4" />
-            </Link>
-            <a
-              href="#how"
-              className="inline-flex items-center rounded-full border border-white/20 px-5 py-3 text-sm text-white"
-            >
-              See how it works
-            </a>
-          </div>
-          <p className="mt-6 text-sm text-white/45">
-            Not an AI receptionist. Not a CRM. Revenue you were already paying to generate.
-          </p>
-        </div>
-        <RevenueCalculator variant="hero" />
-      </div>
-    </section>
   );
 }
 

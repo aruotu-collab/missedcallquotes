@@ -19,9 +19,19 @@ export function Logo({ light = false }: { light?: boolean }) {
   );
 }
 
-export function Header({ signedIn = false }: { signedIn?: boolean }) {
+export function Header({
+  signedIn = false,
+  tone = "paper",
+}: {
+  signedIn?: boolean;
+  tone?: "paper" | "white";
+}) {
   return (
-    <header className="sticky top-0 z-40 border-b border-line/70 bg-paper/85 backdrop-blur">
+    <header
+      className={`sticky top-0 z-40 border-b backdrop-blur ${
+        tone === "white" ? "border-dash-line bg-white/90" : "border-line/70 bg-paper/85"
+      }`}
+    >
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5">
         <Logo />
         <nav className="hidden items-center gap-7 text-sm text-ink-soft md:flex">

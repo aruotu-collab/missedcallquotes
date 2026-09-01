@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import { AuthCard, AuthCheckEmail, AuthField } from "@/components/auth-card";
 
 const magicLink = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL);
 
@@ -12,17 +13,19 @@ function LoginForm() {
   const [error, setError] = useState(search.get("error") === "auth" ? "That sign-in link was invalid or expired." : "");
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
+  const [email, setEmail] = useState("");
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true);
     setError("");
     const form = new FormData(e.currentTarget);
+    const nextEmail = String(form.get("email") || "").trim();
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email: form.get("email"),
+        email: nextEmail,
         password: form.get("password"),
       }),
     });
@@ -33,6 +36,7 @@ function LoginForm() {
       return;
     }
     if (data.checkEmail) {
+      setEmail(nextEmail);
       setSent(true);
       return;
     }
@@ -40,56 +44,58 @@ function LoginForm() {
   }
 
   return (
-    <main className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-md flex-col justify-center px-5 py-16">
-      <h1 className="font-serif text-4xl">Welcome back</h1>
+    <AuthCard>
       {sent ? (
-        <p className="mt-4 text-sm leading-6 text-ink-soft">
-          Check your email for a sign-in link. It expires in a few minutes. You can close this tab.
-        </p>
+        <AuthCheckEmail
+          email={email}
+          intro="We sent a sign-in link to"
+          onUseDifferent={() => {
+            setSent(false);
+            setError("");
+          }}
+        />
       ) : (
         <>
-          <p className="mt-2 text-sm text-ink-soft">
+          <h1 className="font-serif text-3xl text-dash-ink">Welcome back</h1>
+          <p className="mt-2 text-sm leading-6 text-dash-muted">
             {magicLink
-              ? "We’ll email you a one-time link. No password."
+              ? "Enter your email and we will send a one-time sign-in link. No password."
               : "Demo plumber: dave@davesplumbing.test / plumber123"}
           </p>
           <form onSubmit={onSubmit} className="mt-8 grid gap-4">
-            <label className="grid gap-1 text-sm">
-              Email
-              <input
-                name="email"
-                type="email"
-                required
-                defaultValue={magicLink ? "" : "dave@davesplumbing.test"}
-                className="rounded-xl border border-line bg-card px-3 py-2.5"
-              />
-            </label>
+            <AuthField
+              name="email"
+              label="Email"
+              type="email"
+              required
+              defaultValue={magicLink ? email : "dave@davesplumbing.test"}
+            />
             {magicLink ? null : (
-              <label className="grid gap-1 text-sm">
-                Password
-                <input
-                  name="password"
-                  type="password"
-                  required
-                  defaultValue="plumber123"
-                  className="rounded-xl border border-line bg-card px-3 py-2.5"
-                />
-              </label>
+              <AuthField
+                name="password"
+                label="Password"
+                type="password"
+                required
+                defaultValue="plumber123"
+              />
             )}
             {error ? <p className="text-sm text-rust">{error}</p> : null}
             <button
               disabled={busy}
-              className="rounded-full bg-navy py-3 text-sm font-medium text-white"
+              className="rounded-full bg-dash-accent py-3 text-sm font-medium text-white transition-opacity disabled:opacity-60"
             >
               {busy ? (magicLink ? "Sending…" : "Signing in…") : magicLink ? "Email me a sign-in link" : "Log in"}
             </button>
           </form>
+          <p className="mt-6 text-sm text-dash-muted">
+            New here?{" "}
+            <Link href="/signup" className="font-medium text-dash-accent hover:underline">
+              Create an account
+            </Link>
+          </p>
         </>
       )}
-      <p className="mt-6 text-sm text-ink-soft">
-        New here? <Link href="/signup" className="underline">Create an account</Link>
-      </p>
-    </main>
+    </AuthCard>
   );
 }
 

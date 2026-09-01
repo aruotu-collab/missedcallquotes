@@ -1,10 +1,5 @@
-import { Header } from "@/components/site-chrome";
+import { AuthPageShell } from "@/components/auth-shell";
 
 export default function LoginLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <Header />
-      {children}
-    </>
-  );
+  return <AuthPageShell>{children}</AuthPageShell>;
 }

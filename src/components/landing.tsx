@@ -7,11 +7,11 @@ export function Landing() {
   return (
     <main>
       <Hero />
+      <DemoStrip />
       <HowItWorks />
       <Output />
       <DashboardPreview />
       <Intake />
-      <RevenueCalculator />
       <PricingTeaser />
       <Founding />
     </main>
@@ -22,7 +22,7 @@ function Hero() {
   return (
     <section className="relative overflow-hidden bg-navy text-white">
       <div className="absolute inset-0 opacity-40 [background:radial-gradient(circle_at_80%_0%,#b8893a33,transparent_35%),radial-gradient(circle_at_0%_80%,#1f6b4a33,transparent_40%)]" />
-      <div className="relative mx-auto grid max-w-6xl gap-14 px-5 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
+      <div className="relative mx-auto flex max-w-6xl flex-col-reverse gap-10 px-5 py-12 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:py-24">
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-brass">
             Built for UK plumbers & heating engineers
@@ -51,6 +51,24 @@ function Hero() {
           </div>
           <p className="mt-6 text-sm text-white/45">
             Not an AI receptionist. Not a CRM. Revenue you were already paying to generate.
+          </p>
+        </div>
+        <RevenueCalculator variant="hero" />
+      </div>
+    </section>
+  );
+}
+
+function DemoStrip() {
+  return (
+    <section className="border-b border-line bg-paper py-16">
+      <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 lg:grid-cols-2">
+        <div>
+          <p className="text-xs uppercase tracking-[0.2em] text-brass-deep">Try it yourself</p>
+          <h2 className="mt-3 font-serif text-4xl leading-tight">Call this plumber. Then hang up.</h2>
+          <p className="mt-4 max-w-md leading-7 text-ink-soft">
+            After you see what a missed call is costing, watch what the customer actually
+            gets: a short text that turns into a quote-ready job.
           </p>
         </div>
         <DemoChat />

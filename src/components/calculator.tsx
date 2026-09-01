@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { money } from "@/lib/format";
 
-export function RevenueCalculator() {
+export function RevenueCalculator({ variant = "page" }: { variant?: "page" | "hero" }) {
   const [calls, setCalls] = useState(80);
   const [missed, setMissed] = useState(20);
   const [job, setJob] = useState(320);
@@ -13,6 +13,43 @@ export function RevenueCalculator() {
     const missedCalls = calls * (missed / 100) * 4.3;
     return Math.round(missedCalls * (close / 100) * job);
   }, [calls, missed, job, close]);
+
+  if (variant === "hero") {
+    return (
+      <div id="calculator" className="rounded-[28px] border border-white/10 bg-[#0b1220] p-5 text-white phone-frame">
+        <p className="text-[11px] uppercase tracking-[0.18em] text-brass">Missed revenue audit</p>
+        <div className="mt-3 rounded-xl bg-brass px-5 py-4 text-navy">
+          <p className="text-[11px] uppercase tracking-[0.16em] text-brass-deep">Estimated revenue at risk</p>
+          <p className="mt-1 font-serif text-4xl">{money(atRisk)}/month</p>
+          <p className="mt-2 text-sm text-navy/70">
+            MissedCallQuotes is £99–£179/month. One recovered job can cover the year.
+          </p>
+        </div>
+        <p className="mt-5 text-sm text-white/55">Use your own numbers.</p>
+        <div className="mt-3">
+          <Field
+            label={`Calls a week: ${calls}`}
+            value={calls}
+            min={5}
+            max={250}
+            onChange={setCalls}
+            light
+          />
+          <Field label={`Missed: ${missed}%`} value={missed} min={5} max={70} onChange={setMissed} light />
+          <Field
+            label={`Average job: ${money(job)}`}
+            value={job}
+            min={80}
+            max={4000}
+            step={10}
+            onChange={setJob}
+            light
+          />
+          <Field label={`Close rate: ${close}%`} value={close} min={10} max={80} onChange={setClose} light />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section id="calculator" className="border-t border-line bg-paper-2/60 py-24">
@@ -60,6 +97,7 @@ function Field({
   max,
   step = 1,
   onChange,
+  light = false,
 }: {
   label: string;
   value: number;
@@ -67,10 +105,11 @@ function Field({
   max: number;
   step?: number;
   onChange: (n: number) => void;
+  light?: boolean;
 }) {
   return (
-    <label className="mb-5 block">
-      <span className="text-sm text-ink-soft">{label}</span>
+    <label className="mb-4 block">
+      <span className={`text-sm ${light ? "text-white/65" : "text-ink-soft"}`}>{label}</span>
       <input
         type="range"
         min={min}
@@ -78,7 +117,7 @@ function Field({
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="mt-2 w-full accent-navy"
+        className={`mt-2 w-full ${light ? "accent-brass" : "accent-navy"}`}
       />
     </label>
   );

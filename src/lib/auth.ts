@@ -46,6 +46,7 @@ export async function getSessionAccount() {
       userId: user.id,
       firstName: typeof meta.first_name === "string" ? meta.first_name : "",
       businessName: typeof meta.business_name === "string" ? meta.business_name : "",
+      email: user.email,
     });
   }
 

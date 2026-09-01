@@ -56,6 +56,7 @@ export async function ensureMemberBusiness(input: {
   userId: string;
   firstName?: string;
   businessName?: string;
+  email?: string;
 }) {
   const existing = await getBusinessForUser(input.userId);
   if (existing) return existing;
@@ -68,6 +69,7 @@ export async function ensureMemberBusiness(input: {
       user_id: input.userId,
       name: input.businessName?.trim() || "",
       owner_first_name: input.firstName?.trim() || "",
+      owner_email: input.email?.trim().toLowerCase() || "",
       ...NEW_BUSINESS,
     })
     .select("*")

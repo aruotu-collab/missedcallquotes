@@ -40,6 +40,10 @@ NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=paste-the-html-tag-content
 
 4. Redeploy, then click **Verify** in Search Console. Submit `https://missedcallquotes.com/sitemap.xml` under Sitemaps.
 
+### Admin
+
+`aruotu@gmail.com` sees an **Admin** item in the dashboard. Run `supabase/admin.sql` in the SQL editor so that account can read every member, job and visit log. Extra admin emails can go in `ADMIN_EMAILS`.
+
 ## What ships in V1
 
 - Marketing site, live SMS demo, missed-revenue calculator, founding-10 pricing

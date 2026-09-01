@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { isAdminEmail } from "@/lib/admin";
 import { getSessionAccount } from "@/lib/auth";
 import { listLeads, listQuotes } from "@/lib/store";
 import { money, monthLabel, timeAgo } from "@/lib/format";
@@ -7,7 +8,10 @@ import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
   const account = await getSessionAccount();
-  if (!account?.business) redirect("/login");
+  if (!account) redirect("/login");
+  if (!account.business) {
+    redirect(isAdminEmail(account.user.email) ? "/dashboard/admin" : "/login");
+  }
   const leads = await listLeads(account.business.id);
   const quotes = await listQuotes(account.business.id);
   const stats = funnel(leads);

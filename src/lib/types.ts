@@ -53,7 +53,18 @@ export type Business = {
   tone: string;
   plan: PlanId;
   onboarded: boolean;
+  ownerEmail?: string;
   createdAt: string;
+};
+
+export type PageVisit = {
+  id: string;
+  createdAt: string;
+  path: string;
+  ip: string;
+  userAgent: string;
+  referrer: string;
+  country: string;
 };
 
 export type Lead = {
@@ -127,4 +138,5 @@ export type Store = {
   businesses: Business[];
   leads: Lead[];
   quotes: Quote[];
+  pageVisits?: PageVisit[];
 };

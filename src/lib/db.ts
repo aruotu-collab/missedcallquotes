@@ -51,6 +51,7 @@ function demoStore(): Store {
     tone: "plain, calm, local Manchester plumber",
     plan: "founding",
     onboarded: true,
+    ownerEmail: user.email,
     createdAt,
   };
 

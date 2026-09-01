@@ -11,12 +11,13 @@ const links = [
   ["/dashboard/settings", "Setup"],
 ] as const;
 
-export function DashboardNav() {
+export function DashboardNav({ admin = false }: { admin?: boolean }) {
   const pathname = usePathname() ?? "";
+  const items = admin ? [...links, ["/dashboard/admin", "Admin"] as const] : links;
 
   return (
     <nav className="flex gap-1 overflow-x-auto" aria-label="Dashboard">
-      {links.map(([href, label]) => {
+      {items.map(([href, label]) => {
         const active = href === "/dashboard" ? pathname === href : pathname.startsWith(href);
         return (
           <Link

@@ -18,6 +18,7 @@ export type BusinessRow = {
   tone: string;
   plan: string;
   onboarded: boolean;
+  owner_email?: string;
   created_at: string;
 };
 
@@ -78,6 +79,7 @@ export function businessFromRow(row: BusinessRow): Business {
     tone: row.tone,
     plan: row.plan as PlanId,
     onboarded: row.onboarded,
+    ownerEmail: row.owner_email ?? "",
     createdAt: row.created_at,
   };
 }
@@ -140,6 +142,7 @@ const BUSINESS_PATCH: Record<string, string> = {
   tone: "tone",
   plan: "plan",
   onboarded: "onboarded",
+  ownerEmail: "owner_email",
 };
 
 export function businessPatchToRow(patch: Partial<Business>) {

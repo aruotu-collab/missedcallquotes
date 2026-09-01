@@ -25,6 +25,11 @@ export default function PrivacyPage() {
             data. Get a proper DPA and UK legal review before taking live customer traffic.
             This page is a product placeholder, not legal advice.
           </p>
+          <p>
+            The site operator may keep a log of public page visits (time, path, IP address,
+            country and referrer) to operate and secure the service. That log is not shown
+            to member accounts.
+          </p>
           <p>Contact: privacy@missedcallquotes.com</p>
         </div>
       </main>

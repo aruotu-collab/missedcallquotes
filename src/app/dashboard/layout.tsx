@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { signOut } from "@/app/auth/actions";
 import { DashboardNav } from "@/components/dashboard-nav";
 import { Logo } from "@/components/site-chrome";
+import { isAdminEmail } from "@/lib/admin";
 import { getSessionAccount } from "@/lib/auth";
 import { displayFirstName } from "@/lib/format";
 
@@ -15,9 +16,10 @@ export default async function DashboardLayout({
 }) {
   const account = await getSessionAccount();
   if (!account) redirect("/login");
-  if (!account.business?.onboarded) redirect("/onboarding");
+  const admin = isAdminEmail(account.user.email);
+  if (!account.business?.onboarded && !admin) redirect("/onboarding");
 
-  const firstName = displayFirstName(account.business.ownerFirstName, account.user.email);
+  const firstName = displayFirstName(account.business?.ownerFirstName, account.user.email);
 
   return (
     <div className="dash-shell min-h-screen">
@@ -34,7 +36,7 @@ export default async function DashboardLayout({
         <div className="border-t border-dash-line">
           <div className="mx-auto max-w-6xl px-5">
             <Suspense fallback={<div className="h-12" />}>
-              <DashboardNav />
+              <DashboardNav admin={admin} />
             </Suspense>
           </div>
         </div>

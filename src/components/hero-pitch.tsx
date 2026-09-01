@@ -24,13 +24,16 @@ export function HeroPitch() {
           Built for UK plumbers & heating engineers
         </p>
         <h1 className="mt-5 max-w-4xl font-serif text-4xl leading-[1.08] md:text-6xl">
-          You&apos;re losing about{" "}
-          <span className="text-brass">{money(atRisk)}</span> a month to missed calls.
+          Turn missed calls into quote-ready jobs.
         </h1>
         <p className="mt-5 max-w-2xl text-lg leading-8 text-white/70">
-          When you can&apos;t answer, MissedCallQuotes texts the caller, finds out the job,
-          gets the postcode and photos, and sends you a pack you can quote. Keep your
-          existing number.
+          When you can&apos;t answer, MissedCallQuotes texts the caller, finds out exactly
+          what they need, gets their postcode and photos, and gives you a qualified job to
+          quote. Keep your existing phone number.
+        </p>
+        <p className="mt-6 max-w-2xl text-xl leading-8 text-white">
+          Left alone, that usually costs about{" "}
+          <span className="font-serif text-brass">{money(atRisk)}</span> a month.
         </p>
 
         <div className="mt-10 rounded-[28px] border border-white/10 bg-[#0b1220]/80 p-5 md:p-7">

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
-import { Logo } from "@/components/site-chrome";
 
 const magicLink = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL);
 
@@ -41,9 +40,8 @@ function LoginForm() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-5 py-16">
-      <Logo />
-      <h1 className="mt-10 font-serif text-4xl">Welcome back</h1>
+    <main className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-md flex-col justify-center px-5 py-16">
+      <h1 className="font-serif text-4xl">Welcome back</h1>
       {sent ? (
         <p className="mt-4 text-sm leading-6 text-ink-soft">
           Check your email for a sign-in link. It expires in a few minutes. You can close this tab.

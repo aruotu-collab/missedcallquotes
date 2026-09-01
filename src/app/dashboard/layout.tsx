@@ -1,7 +1,10 @@
-import Link from "next/link";
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { signOut } from "@/app/auth/actions";
+import { DashboardNav } from "@/components/dashboard-nav";
+import { Logo } from "@/components/site-chrome";
 import { getSessionAccount } from "@/lib/auth";
+import { displayFirstName } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -14,50 +17,29 @@ export default async function DashboardLayout({
   if (!account) redirect("/login");
   if (!account.business?.onboarded) redirect("/onboarding");
 
-  const links = [
-    ["/dashboard", "Today"],
-    ["/dashboard/leads", "Jobs"],
-    ["/dashboard/quotes", "Quotes"],
-    ["/dashboard/simulate", "Catch a call"],
-    ["/dashboard/settings", "Setup"],
-  ];
+  const firstName = displayFirstName(account.business.ownerFirstName, account.user.email);
 
   return (
     <div className="dash-shell min-h-screen text-white">
-      <aside className="fixed inset-y-0 left-0 hidden w-56 border-r border-white/10 px-5 py-6 md:block">
-        <Link href="/" className="text-sm font-semibold tracking-tight">
-          MissedCallQuotes
-        </Link>
-        <p className="mt-1 text-xs text-white/40">{account.business.name}</p>
-        <nav className="mt-10 grid gap-2 text-sm text-white/70">
-          {links.map(([href, label]) => (
-            <Link key={href} href={href} className="rounded-lg px-2 py-2 hover:bg-white/5 hover:text-white">
-              {label}
-            </Link>
-          ))}
-        </nav>
-        <div className="absolute bottom-6 left-5">
-          <LogoutButton />
-        </div>
-      </aside>
-      <div className="md:pl-56">
-        <header className="border-b border-white/10 px-5 py-4 md:hidden">
-          <div className="flex items-center justify-between">
-            <Link href="/dashboard" className="text-sm font-semibold">
-              MissedCallQuotes
-            </Link>
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0e1622]/90 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5">
+          <Logo light />
+          <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+            <p className="truncate text-sm text-white/70">
+              Welcome back{firstName ? `, ${firstName}` : ""}
+            </p>
             <LogoutButton />
           </div>
-          <nav className="mt-3 flex gap-4 overflow-x-auto text-sm text-white/60">
-            {links.map(([href, label]) => (
-              <Link key={href} href={href} className="shrink-0 hover:text-white">
-                {label}
-              </Link>
-            ))}
-          </nav>
-        </header>
-        <div className="px-5 py-8 md:px-10">{children}</div>
-      </div>
+        </div>
+        <div className="border-t border-white/10">
+          <div className="mx-auto max-w-6xl px-5">
+            <Suspense fallback={<div className="h-12" />}>
+              <DashboardNav />
+            </Suspense>
+          </div>
+        </div>
+      </header>
+      <div className="mx-auto max-w-6xl px-5 py-8 md:px-8 md:py-10">{children}</div>
     </div>
   );
 }
@@ -65,7 +47,10 @@ export default async function DashboardLayout({
 function LogoutButton() {
   return (
     <form action={signOut}>
-      <button type="submit" className="text-xs text-white/40 hover:text-white">
+      <button
+        type="submit"
+        className="rounded-full border border-white/15 px-3.5 py-1.5 text-xs font-medium text-white/70 transition-colors hover:border-white/30 hover:text-white"
+      >
         Log out
       </button>
     </form>

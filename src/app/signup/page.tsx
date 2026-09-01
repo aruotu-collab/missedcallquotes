@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Logo } from "@/components/site-chrome";
 
 const magicLink = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL);
 
@@ -42,9 +41,8 @@ export default function SignupPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-5 py-16">
-      <Logo />
-      <h1 className="mt-10 font-serif text-4xl">Join the founding 10</h1>
+    <main className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-md flex-col justify-center px-5 py-16">
+      <h1 className="font-serif text-4xl">Join the founding 10</h1>
       {sent ? (
         <p className="mt-4 text-sm leading-6 text-ink-soft">
           Check your email for a sign-in link. Click it to finish creating your account.

@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import Link from "next/link";
+import { HeaderActions } from "@/components/header-actions";
 
 export function Logo({ light = false }: { light?: boolean }) {
   return (
@@ -23,36 +25,22 @@ export function Header({ signedIn = false }: { signedIn?: boolean }) {
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5">
         <Logo />
         <nav className="hidden items-center gap-7 text-sm text-ink-soft md:flex">
-          <a href="/#how">How it works</a>
-          <a href="/#calculator">Calculator</a>
-          <Link href="/pricing">Pricing</Link>
-          <Link href="/demo">Live demo</Link>
+          <a href="/#how" className="hover:text-ink">
+            How it works
+          </a>
+          <a href="/#calculator" className="hover:text-ink">
+            Calculator
+          </a>
+          <Link href="/pricing" className="hover:text-ink">
+            Pricing
+          </Link>
+          <Link href="/demo" className="hover:text-ink">
+            Live demo
+          </Link>
         </nav>
-        <div className="flex items-center gap-3">
-          {signedIn ? (
-            <Link
-              href="/dashboard"
-              className="rounded-full bg-navy px-4 py-2 text-sm font-medium text-white"
-            >
-              Dashboard
-            </Link>
-          ) : (
-            <>
-              <Link href="/demo" className="text-sm text-ink-soft md:hidden">
-                Demo
-              </Link>
-              <Link href="/login" className="text-sm text-ink-soft">
-                Log in
-              </Link>
-              <Link
-                href="/signup"
-                className="rounded-full bg-navy px-4 py-2 text-sm font-medium text-white"
-              >
-                Get founding price
-              </Link>
-            </>
-          )}
-        </div>
+        <Suspense fallback={<div className="h-9 w-40" />}>
+          <HeaderActions signedIn={signedIn} />
+        </Suspense>
       </div>
     </header>
   );

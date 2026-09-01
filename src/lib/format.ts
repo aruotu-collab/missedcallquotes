@@ -20,7 +20,15 @@ export function formatPhone(value: string) {
 export function greeting(name: string) {
   const hour = new Date().getHours();
   const part = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
-  return `${part}, ${name}.`;
+  return name.trim() ? `${part}, ${name}.` : `${part}.`;
+}
+
+export function displayFirstName(name?: string | null, email?: string | null) {
+  const trimmed = name?.trim();
+  if (trimmed) return trimmed;
+  const local = email?.split("@")[0]?.replace(/[._-]+/g, " ").trim();
+  if (!local) return "";
+  return local.replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
 export function timeAgo(iso: string) {

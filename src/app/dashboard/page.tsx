@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getSessionAccount } from "@/lib/auth";
 import { listLeads, listQuotes } from "@/lib/store";
-import { greeting, money, timeAgo } from "@/lib/format";
+import { money, monthLabel, timeAgo } from "@/lib/format";
 import { funnel } from "@/lib/metrics";
 import { redirect } from "next/navigation";
 
@@ -15,7 +15,7 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <p className="text-white/50">{greeting(account.business.ownerFirstName)}</p>
+      <p className="text-white/50">{monthLabel()}</p>
       <h1 className="mt-2 font-serif text-4xl text-[#7ddea8] md:text-6xl">
         {money(stats.wonRev)} won from missed calls this month
       </h1>

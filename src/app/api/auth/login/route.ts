@@ -14,7 +14,17 @@ export async function POST(req: Request) {
   if (isSupabaseConfigured()) {
     const error = await sendMagicLink(req, email, { createUser: false });
     if (error) {
-      return Response.json({ error: "Could not send a sign-in link. Check the email or create an account." }, { status: 400 });
+      const noAccount =
+        error.code === "otp_disabled" ||
+        /signups not allowed/i.test(error.message);
+      return Response.json(
+        {
+          error: noAccount
+            ? "No account for that email yet. Create an account first."
+            : error.message || "Could not send a sign-in link.",
+        },
+        { status: 400 },
+      );
     }
     return Response.json({ ok: true, checkEmail: true });
   }

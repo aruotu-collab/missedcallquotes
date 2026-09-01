@@ -87,7 +87,8 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 px-5 py-5 text-center text-xs text-white/45">
-        Built for UK plumbing & heating. Keep your existing number. © {new Date().getFullYear()}{" "}
+        Built for UK plumbers, heating engineers & tradesmen. Keep your existing number. ©{" "}
+        {new Date().getFullYear()}{" "}
         MissedCallQuotes.
       </div>
     </footer>

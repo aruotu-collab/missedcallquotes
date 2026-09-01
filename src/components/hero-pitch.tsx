@@ -21,7 +21,7 @@ export function HeroPitch() {
       <div className="absolute inset-0 opacity-40 [background:radial-gradient(circle_at_80%_0%,#b8893a33,transparent_35%),radial-gradient(circle_at_0%_80%,#1f6b4a33,transparent_40%)]" />
       <div className="relative mx-auto max-w-6xl px-5 py-14 lg:py-20">
         <p className="text-xs uppercase tracking-[0.22em] text-brass">
-          Built for UK plumbers & heating engineers
+          Built for UK plumbers, heating engineers & tradesmen
         </p>
         <h1 className="mt-5 max-w-4xl font-serif text-4xl leading-[1.08] md:text-6xl">
           Turn missed calls into quote-ready jobs.

@@ -8,7 +8,7 @@ export default async function SimulatePage() {
   return (
     <div className="mx-auto max-w-xl">
       <h1 className="font-serif text-4xl">Catch a call</h1>
-      <p className="mt-3 text-sm leading-6 text-white/55">
+      <p className="mt-3 text-sm leading-6 text-dash-muted">
         Until Twilio is wired, play the customer here. A completed conversation becomes a
         real lead on your board.
       </p>

@@ -13,17 +13,17 @@ export default async function LeadPage({ params }: { params: Promise<{ id: strin
 
   return (
     <div className="mx-auto max-w-3xl">
-      <p className="text-xs uppercase tracking-[0.16em] text-brass">
+      <p className="text-xs uppercase tracking-[0.16em] text-dash-accent">
         {lead.status.replace("_", " ")} · {timeAgo(lead.createdAt)}
       </p>
-      <h1 className="mt-2 font-serif text-4xl">
+      <h1 className="mt-2 font-serif text-4xl text-dash-ink">
         {lead.jobLabel} — {lead.postcode || "No area yet"}
       </h1>
-      <p className="mt-2 text-white/55">
+      <p className="mt-2 text-dash-muted">
         {lead.customerName} · {lead.customerPhone || "Number captured at install"}
       </p>
 
-      <dl className="mt-8 divide-y divide-white/10 rounded-2xl border border-white/10">
+      <dl className="mt-8 divide-y divide-dash-line rounded-2xl border border-dash-line bg-white">
         {[
           ["Problem", lead.problem],
           ...Object.entries(lead.answers)
@@ -37,7 +37,7 @@ export default async function LeadPage({ params }: { params: Promise<{ id: strin
           ["Photo", lead.photoNote],
         ].map(([k, v]) => (
           <div key={k} className="grid grid-cols-3 gap-4 px-5 py-3 text-sm">
-            <dt className="text-white/40">{k}</dt>
+            <dt className="text-dash-faint">{k}</dt>
             <dd className="col-span-2">{v}</dd>
           </div>
         ))}
@@ -47,11 +47,11 @@ export default async function LeadPage({ params }: { params: Promise<{ id: strin
 
       {lead.conversation.length ? (
         <div className="mt-10">
-          <h2 className="text-xs uppercase tracking-[0.16em] text-white/40">Conversation</h2>
+          <h2 className="text-xs uppercase tracking-[0.16em] text-dash-faint">Conversation</h2>
           <div className="mt-4 grid gap-2">
             {lead.conversation.map((m, i) => (
-              <p key={i} className="text-sm text-white/70">
-                <span className="text-white/35">{m.role === "assistant" ? "MCQ" : "Caller"}:</span> {m.text}
+              <p key={i} className="text-sm text-dash-ink">
+                <span className="text-dash-faint">{m.role === "assistant" ? "MCQ" : "Caller"}:</span> {m.text}
               </p>
             ))}
           </div>

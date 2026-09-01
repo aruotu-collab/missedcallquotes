@@ -33,6 +33,12 @@
   --color-forest: var(--forest);
   --color-money: var(--money);
   --color-card: var(--card);
+  --color-dash-bg: #ffffff;
+  --color-dash-ink: #0f172a;
+  --color-dash-muted: #64748b;
+  --color-dash-faint: #94a3b8;
+  --color-dash-line: #e2e8f0;
+  --color-dash-accent: #2563eb;
   --font-sans: var(--font-geist-sans);
   --font-serif: var(--font-newsreader);
   --font-mono: var(--font-geist-mono);
@@ -69,9 +75,12 @@ h3,
 }
 
 .dash-shell {
-  background:
-    radial-gradient(1200px 500px at 10% -10%, rgba(184, 137, 58, 0.12), transparent 50%),
-    #0e1622;
+  background: var(--color-dash-bg);
+  color: var(--color-dash-ink);
+}
+
+.dash-shell * {
+  border-color: var(--color-dash-line);
 }
 
 input,

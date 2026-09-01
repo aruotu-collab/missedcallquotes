@@ -24,8 +24,8 @@ export function DashboardNav() {
             href={href}
             className={`shrink-0 border-b-2 px-3 py-3 text-sm transition-colors ${
               active
-                ? "border-brass text-white"
-                : "border-transparent text-white/55 hover:text-white"
+                ? "border-dash-accent font-medium text-dash-accent"
+                : "border-transparent text-dash-muted hover:text-dash-accent"
             }`}
           >
             {label}

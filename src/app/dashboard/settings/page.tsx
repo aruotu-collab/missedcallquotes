@@ -8,7 +8,7 @@ export default async function SettingsPage() {
   return (
     <div className="max-w-xl">
       <h1 className="font-serif text-4xl">Setup</h1>
-      <p className="mt-2 text-sm text-white/45">
+      <p className="mt-2 text-sm text-dash-muted">
         Prices, areas and tone. The system quotes only what you configure.
       </p>
       <SettingsForm business={account.business} />

@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MissedCallQuotes
 
-## Getting Started
+Turn missed calls into quote-ready jobs for UK plumbers and heating engineers.
 
-First, run the development server:
+This is the founder MVP from the strategy thread: **missed call → plumbing intake → quote-ready pack → human action → outcome tracking**. It is not an AI receptionist and not a CRM.
+
+## Run it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Demo plumber login:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Email: `dave@davesplumbing.test`
+- Password: `plumber123`
 
-## Learn More
+## What ships in V1
 
-To learn more about Next.js, take a look at the following resources:
+- Marketing site, live SMS demo, missed-revenue calculator, founding-10 pricing
+- Plumbing intake engine for the main enquiry types (boiler, leak, burst, drains, bathroom, etc.)
+- Plumber dashboard: recovered revenue, needs-you queue, accept / quote / follow up / won / collected
+- Quote list so the domain’s second half is visible immediately
+- Simulated missed-call catcher (creates real leads) until Twilio is connected
+- Twilio webhook stubs at `/api/twilio/voice` and `/api/twilio/sms`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Data lives in `.data/store.json` so you can run without Postgres. Swap that file store for Supabase/Postgres before you have more than a handful of paying plumbers.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Pricing the company around
 
-## Deploy on Vercel
+| Plan | Price | Role |
+| --- | --- | --- |
+| Founding 10 | £79 locked 12 months | Learning, case studies |
+| Solo | £99 | Capture + qualification |
+| Growth | £179 | The plan to sell |
+| Multi-van | £299 | Staff + numbers |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Guarantee: if it does not generate one genuine qualified opportunity in 30 days, the next month is free. Card on install, not a 14-day tyre-kicker trial.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## First 90 days (from the thread)
+
+1. Prove call-forwarding + caller ID on EE, O2, Vodafone and Three.
+2. Recruit 10 Manchester plumbing/heating firms (1–10 engineers, already buying leads).
+3. Obsess over **recovered revenue per customer per month**, not MRR.
+4. Add quote follow-up next. Voice AI last.
+
+## Before live traffic
+
+- UK legal review (PECR/GDPR, TPS/CTPS for outbound, privacy notice, DPA)
+- Keep missed-call SMS transactional — no promotions
+- Deterministic safety copy for gas / CO / flooding (already in the engine)
+- Connect Twilio, Stripe, and optionally OpenAI structured outputs

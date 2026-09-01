@@ -1,0 +1,76 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Logo } from "@/components/site-chrome";
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setBusy(true);
+    setError("");
+    const form = new FormData(e.currentTarget);
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: form.get("email"),
+        password: form.get("password"),
+      }),
+    });
+    const data = await res.json();
+    setBusy(false);
+    if (!res.ok) {
+      setError(data.error || "Could not log in");
+      return;
+    }
+    router.push(data.onboarded ? "/dashboard" : "/onboarding");
+  }
+
+  return (
+    <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-5 py-16">
+      <Logo />
+      <h1 className="mt-10 font-serif text-4xl">Welcome back</h1>
+      <p className="mt-2 text-sm text-ink-soft">
+        Demo plumber: dave@davesplumbing.test / plumber123
+      </p>
+      <form onSubmit={onSubmit} className="mt-8 grid gap-4">
+        <label className="grid gap-1 text-sm">
+          Email
+          <input
+            name="email"
+            type="email"
+            required
+            defaultValue="dave@davesplumbing.test"
+            className="rounded-xl border border-line bg-card px-3 py-2.5"
+          />
+        </label>
+        <label className="grid gap-1 text-sm">
+          Password
+          <input
+            name="password"
+            type="password"
+            required
+            defaultValue="plumber123"
+            className="rounded-xl border border-line bg-card px-3 py-2.5"
+          />
+        </label>
+        {error ? <p className="text-sm text-rust">{error}</p> : null}
+        <button
+          disabled={busy}
+          className="rounded-full bg-navy py-3 text-sm font-medium text-white"
+        >
+          {busy ? "Signing in…" : "Log in"}
+        </button>
+      </form>
+      <p className="mt-6 text-sm text-ink-soft">
+        New here? <Link href="/signup" className="underline">Create an account</Link>
+      </p>
+    </main>
+  );
+}

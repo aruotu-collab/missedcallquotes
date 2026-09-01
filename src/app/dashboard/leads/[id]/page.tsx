@@ -1,0 +1,62 @@
+import { notFound, redirect } from "next/navigation";
+import { getSessionAccount } from "@/lib/auth";
+import { leadsFor } from "@/lib/db";
+import { LeadActions } from "@/components/lead-actions";
+import { money, timeAgo } from "@/lib/format";
+
+export default async function LeadPage({ params }: { params: Promise<{ id: string }> }) {
+  const account = await getSessionAccount();
+  if (!account?.business) redirect("/login");
+  const { id } = await params;
+  const lead = leadsFor(account.business.id).find((l) => l.id === id);
+  if (!lead) notFound();
+
+  return (
+    <div className="mx-auto max-w-3xl">
+      <p className="text-xs uppercase tracking-[0.16em] text-brass">
+        {lead.status.replace("_", " ")} · {timeAgo(lead.createdAt)}
+      </p>
+      <h1 className="mt-2 font-serif text-4xl">
+        {lead.jobLabel} — {lead.postcode || "No area yet"}
+      </h1>
+      <p className="mt-2 text-white/55">
+        {lead.customerName} · {lead.customerPhone || "Number captured at install"}
+      </p>
+
+      <dl className="mt-8 divide-y divide-white/10 rounded-2xl border border-white/10">
+        {[
+          ["Problem", lead.problem],
+          ...Object.entries(lead.answers)
+            .filter(([k]) => k !== "problem")
+            .map(([k, v]) => [k, v] as const),
+          ["Likely job", lead.likelyJob],
+          ["Typical value", `${money(lead.typicalMin)}–${money(lead.typicalMax)}`],
+          ["Quoted", lead.quotedAmount ? money(lead.quotedAmount) : "—"],
+          ["Won", lead.wonAmount ? money(lead.wonAmount) : "—"],
+          ["Collected", lead.collectedAmount ? money(lead.collectedAmount) : "—"],
+          ["Photo", lead.photoNote],
+        ].map(([k, v]) => (
+          <div key={k} className="grid grid-cols-3 gap-4 px-5 py-3 text-sm">
+            <dt className="text-white/40">{k}</dt>
+            <dd className="col-span-2">{v}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <LeadActions lead={lead} callOut={account.business.callOut} diagnostic={account.business.boilerDiagnostic} />
+
+      {lead.conversation.length ? (
+        <div className="mt-10">
+          <h2 className="text-xs uppercase tracking-[0.16em] text-white/40">Conversation</h2>
+          <div className="mt-4 grid gap-2">
+            {lead.conversation.map((m, i) => (
+              <p key={i} className="text-sm text-white/70">
+                <span className="text-white/35">{m.role === "assistant" ? "MCQ" : "Caller"}:</span> {m.text}
+              </p>
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}

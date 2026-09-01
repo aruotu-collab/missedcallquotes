@@ -1,0 +1,54 @@
+import { getSessionAccount } from "@/lib/auth";
+import { reply, startConversation } from "@/lib/engine";
+import { readStore, uid, writeStore } from "@/lib/db";
+import type { ConversationState, Lead } from "@/lib/types";
+
+export async function POST(req: Request) {
+  const body = (await req.json()) as {
+    state?: ConversationState;
+    text?: string;
+    businessName?: string;
+    persist?: boolean;
+    customerName?: string;
+    customerPhone?: string;
+  };
+  const businessName = body.businessName || "Dave's Plumbing";
+  const incoming = body.state ?? startConversation(businessName);
+  const next = reply(incoming, body.text || "", businessName);
+
+  if (next.complete && next.lead && body.persist) {
+    const account = await getSessionAccount();
+    if (account?.business) {
+      const store = readStore();
+      const lead: Lead = {
+        id: uid("lead"),
+        businessId: account.business.id,
+        customerName: body.customerName || next.lead.customerName,
+        customerPhone: body.customerPhone || next.lead.customerPhone,
+        jobType: next.lead.jobType,
+        jobLabel: next.lead.jobLabel,
+        problem: next.lead.problem,
+        answers: next.lead.answers,
+        postcode: next.lead.postcode,
+        urgency: next.lead.urgency,
+        preferredTime: next.lead.preferredTime,
+        photoNote: next.lead.photoNote,
+        likelyJob: next.lead.likelyJob,
+        typicalMin: next.lead.typicalMin,
+        typicalMax: next.lead.typicalMax,
+        quotedAmount: null,
+        wonAmount: null,
+        collectedAmount: null,
+        status: "new",
+        existingCustomer: false,
+        conversation: next.messages,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      store.leads.push(lead);
+      writeStore(store);
+    }
+  }
+
+  return Response.json({ state: next });
+}

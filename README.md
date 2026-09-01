@@ -27,6 +27,19 @@ Members sign in with a **magic link** once Supabase is configured. Without those
    - Redirect URLs: `https://missedcallquotes.com/auth/callback`, `http://localhost:3000/auth/callback`, `http://localhost:3001/auth/callback`
 4. Authentication → Providers → Email: enable magic links.
 
+### Google Analytics + Search Console
+
+1. In [Google Analytics](https://analytics.google.com/) create a GA4 property for `https://missedcallquotes.com` and copy the Measurement ID (`G-…`).
+2. In [Search Console](https://search.google.com/search-console) add the URL-prefix property `https://missedcallquotes.com`, choose **HTML tag**, and copy the `content` value from the meta tag.
+3. Set both on Vercel (Production) and in `.env.local`:
+
+```
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=paste-the-html-tag-content
+```
+
+4. Redeploy, then click **Verify** in Search Console. Submit `https://missedcallquotes.com/sitemap.xml` under Sitemaps.
+
 ## What ships in V1
 
 - Marketing site, live SMS demo, missed-revenue calculator, founding-10 pricing

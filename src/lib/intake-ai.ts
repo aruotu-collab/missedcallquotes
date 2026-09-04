@@ -50,9 +50,10 @@ async function continueIntake(
   state: ConversationState,
   text: string,
   businessName: string,
-  ai = await interpretTurn(state, text, businessName),
+  ai?: AiTurn | null,
 ) {
-  if (isSmallTalk(text) || ai?.intent === "closer") {
+  const turn = ai ?? (await interpretTurn(state, text, businessName));
+  if (isSmallTalk(text) || turn?.intent === "closer") {
     const missing = nextMissing(state);
     const fallback = missing ? `No problem. ${missing.question}` : "No problem — I've got what I need.";
     return {
@@ -60,16 +61,16 @@ async function continueIntake(
       messages: [
         ...state.messages,
         { role: "customer" as const, text, at: new Date().toISOString() },
-        { role: "assistant" as const, text: sanitizeSms(ai?.reply) || fallback, at: new Date().toISOString() },
+        { role: "assistant" as const, text: sanitizeSms(turn?.reply) || fallback, at: new Date().toISOString() },
       ],
     };
   }
 
-  const jobType = validJobType(ai?.jobType) || state.jobType;
+  const jobType = validJobType(turn?.jobType) || state.jobType;
   const merged: ConversationState = {
     ...state,
     jobType,
-    answers: { ...state.answers, ...(ai?.answers || {}) },
+    answers: { ...state.answers, ...(turn?.answers || {}) },
   };
   if (!merged.jobType) merged.jobType = classifyJob(text);
 
@@ -78,7 +79,7 @@ async function continueIntake(
   const next = reply(merged, text, businessName, { capture: !filledCurrent });
 
   if (next.safety) return next;
-  const phrased = sanitizeSms(ai?.reply);
+  const phrased = sanitizeSms(turn?.reply);
   if (!phrased) return next;
   const last = next.messages.at(-1);
   if (!last || last.role !== "assistant") return next;

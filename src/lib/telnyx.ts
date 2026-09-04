@@ -8,8 +8,10 @@ export function telnyxApiKey() {
 
 export function inboundSms(body: {
   data?: {
+    id?: string;
     event_type?: string;
     payload?: {
+      id?: string;
       direction?: string;
       text?: string | null;
       from?: { phone_number?: string };
@@ -25,7 +27,12 @@ export function inboundSms(body: {
   const to = payload.to?.[0]?.phone_number?.trim();
   const text = (payload.text || "").trim();
   if (!from) return null;
-  return { from, to: to || telnyxNumber(), text };
+  return {
+    id: payload.id || event.id || "",
+    from,
+    to: to || telnyxNumber(),
+    text,
+  };
 }
 
 export async function sendSms(to: string, text: string) {

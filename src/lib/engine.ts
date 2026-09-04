@@ -264,10 +264,35 @@ export function classifyJob(text: string): JobType {
   return "other";
 }
 
-function nextMissing(state: ConversationState): Field | null {
+export function nextMissing(state: ConversationState): Field | null {
   if (!state.jobType) return null;
   const fields = [...JOB_SPECS[state.jobType].fields, ...SHARED_FIELDS];
   return fields.find((field) => !state.answers[field.key]) ?? null;
+}
+
+export function isSmallTalk(text: string) {
+  return /^(thanks|thank you|cheers|ta|ok|okay|cool|perfect|great|brilliant|lovely|no worries|that's (all|it|fine|ok|okay)|thats (all|it|fine|ok|okay)|please)[\s!.]*$/i.test(
+    text.trim(),
+  );
+}
+
+export function acknowledgeComplete(
+  state: ConversationState,
+  userText: string,
+  businessName: string,
+  phrased?: string,
+) {
+  return {
+    ...state,
+    messages: [
+      ...state.messages,
+      msg("customer", userText.trim()),
+      msg(
+        "assistant",
+        phrased?.trim() || `You're welcome — I've passed this to ${businessName}. They'll be in touch.`,
+      ),
+    ],
+  };
 }
 
 function buildLead(state: ConversationState, firstCustomerText: string): ConversationState["lead"] {
@@ -313,9 +338,11 @@ export function reply(
   state: ConversationState,
   userText: string,
   businessName = "the team",
+  options?: { capture?: boolean },
 ): ConversationState {
   const text = userText.trim();
   if (!text) return state;
+  const capture = options?.capture !== false;
 
   const next: ConversationState = {
     ...state,
@@ -342,7 +369,7 @@ export function reply(
   if (!next.jobType) {
     next.jobType = classifyJob(text);
     next.answers = { ...next.answers, ...inferAnswers(text, next.jobType) };
-  } else {
+  } else if (capture) {
     const missing = nextMissing(next);
     if (missing) next.answers[missing.key] = text;
   }

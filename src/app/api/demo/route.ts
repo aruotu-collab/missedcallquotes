@@ -1,5 +1,6 @@
 import { getSessionAccount } from "@/lib/auth";
-import { reply, startConversation } from "@/lib/engine";
+import { startConversation } from "@/lib/engine";
+import { replySmart } from "@/lib/intake-ai";
 import { insertLead } from "@/lib/store";
 import type { ConversationState } from "@/lib/types";
 
@@ -14,7 +15,7 @@ export async function POST(req: Request) {
   };
   const businessName = body.businessName || "Dave's Plumbing";
   const incoming = body.state ?? startConversation(businessName);
-  const next = reply(incoming, body.text || "", businessName);
+  const next = await replySmart(incoming, body.text || "", businessName);
 
   if (next.complete && next.lead && body.persist) {
     const account = await getSessionAccount();
